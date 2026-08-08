@@ -55,7 +55,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
       navigator.pop();
       messenger.showSnackBar(
         SnackBar(
-          content: Text(count == 0 ? 'Nothing to import' : 'Imported $count servers'),
+          content: Text(count == 0 ? 'Нечего импортировать' : 'Импортировано серверов: $count'),
         ),
       );
     } catch (error) {
@@ -75,7 +75,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
           children: [
             TabBar(
               controller: _tabs,
-              tabs: const [Tab(text: 'Share links'), Tab(text: 'Subscription')],
+              tabs: const [Tab(text: 'Ссылки'), Tab(text: 'Подписка')],
             ),
             SizedBox(
               height: 240,
@@ -107,7 +107,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'vless://…\nvmess://…\ntrojan://…\nss://…',
-                labelText: 'One link per line, base64 or raw Xray json',
+                labelText: 'Одна ссылка на строку, base64 или JSON Xray',
               ),
             ),
           ),
@@ -124,7 +124,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
                         }
                       },
                 icon: const Icon(Icons.paste),
-                label: const Text('Paste'),
+                label: const Text('Вставить'),
               ),
               const Spacer(),
               FilledButton(
@@ -134,7 +134,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
                           (controller) =>
                               controller.importText(_linksController.text.trim()),
                         ),
-                child: const Text('Import'),
+                child: const Text('Импорт'),
               ),
             ],
           ),
@@ -153,7 +153,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
             keyboardType: TextInputType.url,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Subscription URL',
+              labelText: 'URL подписки',
               hintText: 'https://example.com/sub',
             ),
           ),
@@ -167,7 +167,7 @@ class _ImportSheetState extends State<_ImportSheet> with SingleTickerProviderSta
                         (controller) => controller
                             .importSubscription(_subscriptionController.text.trim()),
                       ),
-              child: const Text('Fetch and import'),
+              child: const Text('Загрузить и импортировать'),
             ),
           ),
         ],
