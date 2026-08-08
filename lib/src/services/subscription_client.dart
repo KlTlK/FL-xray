@@ -1,41 +1,47 @@
-import 'package:dio/dio.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'dart:io';
 
-/// Downloads a subscription body; the payload is parsed by libXray on the native side.
+/// Downloads a subscription body using system curl (proper TLS fingerprint + cookies).
 class SubscriptionClient {
-  SubscriptionClient() {
-    _dio.interceptors.add(CookieManager(_cookieJar));
-  }
-
-  final _cookieJar = CookieJar();
-  final _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(seconds: 20),
-    receiveTimeout: const Duration(seconds: 20),
-    followRedirects: true,
-    maxRedirects: 10,
-    validateStatus: (status) => status != null && status < 500,
-  ));
-
   Future<String> fetch(String url) async {
     final trimmed = url.trim();
     final uri = Uri.parse(trimmed);
     if (!uri.hasScheme || !(uri.isScheme('http') || uri.isScheme('https'))) {
       throw const FormatException('URL подписки должен начинаться с http(s)://');
     }
-    final response = await _dio.get(
+
+    final tmpOut = '${Directory.systemTemp.path}${Platform.pathSeparator}fl_xray_sub.txt';
+    final tmpCookie = '${Directory.systemTemp.path}${Platform.pathSeparator}fl_xray_cookies.txt';
+
+    try { File(tmpOut).deleteSync(); } catch (_) {}
+    try { File(tmpCookie).deleteSync(); } catch (_) {}
+
+    final result = await Process.run('curl', [
+      '-L',
+      '-s', '-S',
+      '--max-redirs', '10',
+      '-c', tmpCookie,
+      '-b', tmpCookie,
+      '-A', 'v2rayN/6.23',
+      '-o', tmpOut,
+      '--connect-timeout', '15',
+      '--max-time', '30',
       trimmed,
-      options: Options(
-        headers: {'User-Agent': 'v2rayN/6.23'},
-        responseType: ResponseType.plain,
-      ),
-    );
-    if (response.statusCode != 200) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        message: 'Запрос подписки завершился с HTTP ${response.statusCode}',
-      );
+    ]);
+
+    if (result.exitCode != 0) {
+      throw StateError('curl error ${result.exitCode}: ${result.stderr.toString().trim()}');
     }
-    return response.data.toString();
+
+    final file = File(tmpOut);
+    if (!file.existsSync() || file.lengthSync() == 0) {
+      throw StateError('Пустой ответ от сервера');
+    }
+
+    final body = file.readAsStringSync();
+
+    try { File(tmpOut).deleteSync(); } catch (_) {}
+    try { File(tmpCookie).deleteSync(); } catch (_) {}
+
+    return body;
   }
 }
