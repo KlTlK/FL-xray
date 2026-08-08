@@ -14,24 +14,24 @@ class LogsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Logs'),
+        title: const Text('Логи'),
         actions: [
           IconButton(
-            tooltip: 'Copy',
+            tooltip: 'Копировать',
             onPressed: logs.isEmpty
                 ? null
                 : () => Clipboard.setData(ClipboardData(text: logs.join('\n'))),
             icon: const Icon(Icons.copy_all_outlined),
           ),
           IconButton(
-            tooltip: 'Clear',
+            tooltip: 'Очистить',
             onPressed: logs.isEmpty ? null : controller.clearLogs,
             icon: const Icon(Icons.delete_outline),
           ),
         ],
       ),
       body: logs.isEmpty
-          ? const Center(child: Text('No log entries yet'))
+          ? const Center(child: Text('Логов пока нет'))
           : ListView.builder(
               reverse: true,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
