@@ -7,7 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # windows-latest (2025) ships a Visual Studio layout the Flutter tool fails to
+    # detect, falling back to the "Visual Studio 16 2019" generator.
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -15,6 +17,7 @@ jobs:
           flutter-version: 3.35.7
           channel: stable
           cache: true
+      - run: flutter doctor -v
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
