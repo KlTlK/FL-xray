@@ -14,15 +14,15 @@ class SettingsPage extends StatelessWidget {
     final locked = controller.status.isActive;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const Text('Настройки')),
       body: ListView(
         children: [
           if (locked)
             const ListTile(
               leading: Icon(Icons.lock_outline),
-              title: Text('Disconnect to change the tunnel configuration'),
+              title: const Text('Отключитесь для изменения настроек туннеля'),
             ),
-          const _SectionHeader('Tunnel mode'),
+          const _SectionHeader('Режим туннеля'),
           RadioGroup<TunnelMode>(
             groupValue: settings.mode,
             onChanged: locked
@@ -33,26 +33,26 @@ class SettingsPage extends StatelessWidget {
                 RadioListTile<TunnelMode>(
                   value: TunnelMode.tun,
                   enabled: !locked,
-                  title: const Text('TUN (full device tunnel)'),
+                  title: const Text('TUN (полный туннель)'),
                   subtitle: Text(
                     controller.isElevated
-                        ? 'Creates the wintun adapter and routes everything through Xray'
-                        : 'Creates the wintun adapter — requires running as administrator',
+                        ? 'Создаёт адаптер wintun и маршрутизирует всё через Xray'
+                        : 'Создаёт адаптер wintun — требует запуска от администратора',
                   ),
                 ),
                 RadioListTile<TunnelMode>(
                   value: TunnelMode.systemProxy,
                   enabled: !locked,
-                  title: const Text('System proxy'),
+                  title: const Text('Системный прокси'),
                   subtitle:
-                      const Text('Local SOCKS/HTTP inbounds, no elevation needed'),
+                      const Text('Локальные SOCKS/HTTP, повышение прав не требуется'),
                 ),
               ],
             ),
           ),
           if (settings.mode == TunnelMode.systemProxy)
             SwitchListTile(
-              title: const Text('Register as the Windows system proxy'),
+              title: const Text('Зарегистрировать как системный прокси Windows'),
               subtitle: Text('127.0.0.1:${settings.httpPort} while connected'),
               value: settings.setSystemProxy,
               onChanged: locked
@@ -61,32 +61,32 @@ class SettingsPage extends StatelessWidget {
                       .updateSettings(settings.copyWith(setSystemProxy: value)),
             ),
           const Divider(),
-          const _SectionHeader('Network'),
+          const _SectionHeader('Сеть'),
           _NumberTile(
-            title: 'SOCKS port',
+            title: 'Порт SOCKS',
             value: settings.socksPort,
             enabled: !locked,
             onChanged: (value) =>
                 controller.updateSettings(settings.copyWith(socksPort: value)),
           ),
           _NumberTile(
-            title: 'HTTP port',
+            title: 'Порт HTTP',
             value: settings.httpPort,
             enabled: !locked,
             onChanged: (value) =>
                 controller.updateSettings(settings.copyWith(httpPort: value)),
           ),
           _TextTile(
-            title: 'Remote DNS',
-            subtitle: 'Resolved through the proxy',
+            title: 'Удалённый DNS',
+            subtitle: 'Разрешается через прокси',
             value: settings.remoteDns,
             enabled: !locked,
             onChanged: (value) =>
                 controller.updateSettings(settings.copyWith(remoteDns: value)),
           ),
           _TextTile(
-            title: 'Direct DNS',
-            subtitle: 'Used by the direct-routing rules',
+            title: 'Прямой DNS',
+            subtitle: 'Используется правилами прямого маршрута',
             value: settings.directDns,
             enabled: !locked,
             onChanged: (value) =>
@@ -100,10 +100,10 @@ class SettingsPage extends StatelessWidget {
                 controller.updateSettings(settings.copyWith(mtu: value)),
           ),
           const Divider(),
-          const _SectionHeader('Routing'),
+          const _SectionHeader('Маршрутизация'),
           SwitchListTile(
-            title: const Text('Bypass local networks'),
-            subtitle: const Text('Send private and link-local traffic directly'),
+            title: const Text('Обход локальных сетей'),
+            subtitle: const Text('Приватный и локальный трафик идёт напрямую'),
             value: settings.bypassLan,
             onChanged: locked
                 ? null
@@ -111,8 +111,8 @@ class SettingsPage extends StatelessWidget {
                     controller.updateSettings(settings.copyWith(bypassLan: value)),
           ),
           SwitchListTile(
-            title: const Text('Bypass mainland China'),
-            subtitle: const Text('Route geosite:cn and geoip:cn directly'),
+            title: const Text('Обход материкового Китая'),
+            subtitle: const Text('geosite:cn и geoip:cn идут напрямую'),
             value: settings.bypassMainland,
             onChanged: locked
                 ? null
@@ -121,7 +121,7 @@ class SettingsPage extends StatelessWidget {
           ),
           SwitchListTile(
             title: const Text('IPv6'),
-            subtitle: const Text('Route IPv6 instead of blocking it'),
+            subtitle: const Text('Маршрутизировать IPv6 вместо блокировки'),
             value: settings.enableIpv6,
             onChanged: locked
                 ? null
@@ -129,7 +129,7 @@ class SettingsPage extends StatelessWidget {
                     controller.updateSettings(settings.copyWith(enableIpv6: value)),
           ),
           ListTile(
-            title: const Text('Log level'),
+            title: const Text('Уровень логов'),
             trailing: DropdownButton<String>(
               value: settings.logLevel,
               onChanged: locked
@@ -145,21 +145,21 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: const Text('Administrator rights'),
-            subtitle: Text(controller.isElevated ? 'Granted' : 'Not granted'),
+            title: const Text('Права администратора'),
+            subtitle: Text(controller.isElevated ? 'Получены' : 'Не получены'),
             trailing: controller.isElevated
                 ? null
                 : TextButton(
                     onPressed: controller.relaunchElevated,
-                    child: const Text('Restart as admin'),
+                    child: const Text('Перезапуск от админа'),
                   ),
           ),
           ListTile(
             title: const Text('Xray-core'),
             subtitle: Text(
               controller.coreInstalled
-                  ? 'Bundled next to the application'
-                  : 'Missing — rebuild the app to install it',
+                  ? 'Встроен в приложение'
+                  : 'Отсутствует — пересоберите приложение',
             ),
           ),
         ],
@@ -273,11 +273,11 @@ Future<String?> promptForValue(
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: const Text('Отмена'),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, field.text.trim()),
-          child: const Text('Save'),
+          child: const Text('Сохранить'),
         ),
       ],
     ),
