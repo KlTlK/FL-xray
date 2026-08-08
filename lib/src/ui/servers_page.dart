@@ -17,10 +17,10 @@ class ServersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Servers'),
+        title: const Text('Серверы'),
         actions: [
           IconButton(
-            tooltip: 'Measure latency',
+            tooltip: 'Измерить задержку',
             onPressed: controller.busy || profiles.isEmpty
                 ? null
                 : () => controller.measureLatency(),
@@ -44,9 +44,9 @@ class ServersPage extends StatelessWidget {
               PopupMenuItem(
                 value: 'refresh',
                 enabled: controller.subscriptionUrl != null,
-                child: const Text('Refresh subscription'),
+                child: const Text('Обновить подписку'),
               ),
-              const PopupMenuItem(value: 'clear', child: Text('Remove all')),
+              const PopupMenuItem(value: 'clear', child: const Text('Удалить все')),
             ],
           ),
         ],
@@ -54,7 +54,7 @@ class ServersPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showImportSheet(context),
         icon: const Icon(Icons.add),
-        label: const Text('Add'),
+        label: const Text('Добавить'),
       ),
       body: profiles.isEmpty
           ? const _EmptyState()
@@ -82,7 +82,7 @@ class ServersPage extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(context);
     try {
       final count = await controller.importSubscription(url);
-      messenger.showSnackBar(SnackBar(content: Text('Imported $count servers')));
+      messenger.showSnackBar(SnackBar(content: Text('Импортировано серверов: $count')));
     } catch (error) {
       messenger.showSnackBar(SnackBar(content: Text('$error')));
     }
@@ -124,9 +124,9 @@ class _ServerTile extends StatelessWidget {
               }
             },
             itemBuilder: (context) => const [
-              PopupMenuItem(value: 'rename', child: Text('Rename')),
-              PopupMenuItem(value: 'copy', child: Text('Copy outbound json')),
-              PopupMenuItem(value: 'delete', child: Text('Delete')),
+              PopupMenuItem(value: 'rename', child: const Text('Переименовать')),
+              PopupMenuItem(value: 'copy', child: const Text('Копировать JSON')),
+              PopupMenuItem(value: 'delete', child: const Text('Удалить')),
             ],
           ),
         ],
@@ -143,16 +143,16 @@ class _ServerTile extends StatelessWidget {
     final name = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Rename server'),
+        title: const Text('Переименовать сервер'),
         content: TextField(controller: field, autofocus: true),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Отмена'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, field.text.trim()),
-            child: const Text('Save'),
+            child: const Text('Сохранить'),
           ),
         ],
       ),
@@ -177,13 +177,13 @@ class _EmptyState extends StatelessWidget {
             const Icon(Icons.dns_outlined, size: 64),
             const SizedBox(height: 16),
             Text(
-              'No servers yet',
+              'Серверов пока нет',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             const Text(
-              'Add a vless://, vmess://, trojan:// or ss:// link, '
-              'or import a subscription.',
+              'Добавьте ссылку vless://, vmess://, trojan:// или ss://, '
+              'или импортируйте подписку.',
               textAlign: TextAlign.center,
             ),
           ],
