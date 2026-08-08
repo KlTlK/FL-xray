@@ -52,19 +52,19 @@ class _ConnectionPageState extends State<ConnectionPage> {
     final restart = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Administrator rights required'),
+        title: const Text('Нужны права администратора'),
         content: const Text(
-          'TUN mode creates a wintun network adapter, which Windows only allows '
-          'for elevated processes. Restart FL-xray as administrator?',
+          'Режим TUN создаёт сетевой адаптер wintun, который Windows разрешает '
+          'только для процессов с повышенными правами. Перезапустить FL-xray от имени администратора?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const Text('Отмена'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Restart as admin'),
+            child: const Text('Перезапустить от админа'),
           ),
         ],
       ),
@@ -88,7 +88,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Chip(
-                label: Text(tunMode ? 'TUN' : 'System proxy'),
+                label: Text(tunMode ? 'TUN' : 'Системный прокси'),
                 visualDensity: VisualDensity.compact,
               ),
             ),
@@ -105,9 +105,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 color: theme.colorScheme.errorContainer,
                 child: const ListTile(
                   leading: Icon(Icons.error_outline),
-                  title: Text('xray.exe is missing from the app folder'),
+                  title: Text('xray.exe не найден в папке приложения'),
                   subtitle: Text(
-                    'Rebuild the app so CMake installs Xray-core into data/xray.',
+                    'Пересоберите приложение, чтобы CMake установил Xray-core в data/xray.',
                   ),
                 ),
               ),
@@ -138,10 +138,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
             Card(
               child: ListTile(
                 leading: const Icon(Icons.dns_outlined),
-                title: Text(selected?.name ?? 'No server selected'),
+                title: Text(selected?.name ?? 'Сервер не выбран'),
                 subtitle: Text(
                   selected == null
-                      ? 'Add a server on the Servers tab'
+                      ? 'Добавьте сервер на вкладке Серверы'
                       : '${selected.endpoint} · ${selected.transport}',
                 ),
               ),
@@ -153,21 +153,21 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   Expanded(
                     child: _Metric(
                       icon: Icons.timer_outlined,
-                      label: 'Uptime',
+                      label: 'Время работы',
                       value: formatDuration(status.uptime),
                     ),
                   ),
                   Expanded(
                     child: _Metric(
                       icon: Icons.upload_outlined,
-                      label: 'Uploaded',
+                      label: 'Отдано',
                       value: formatBytes(status.uplink),
                     ),
                   ),
                   Expanded(
                     child: _Metric(
                       icon: Icons.download_outlined,
-                      label: 'Downloaded',
+                      label: 'Получено',
                       value: formatBytes(status.downlink),
                     ),
                   ),
@@ -193,15 +193,15 @@ class _ConnectionPageState extends State<ConnectionPage> {
   String _label(VpnStatus status) {
     switch (status.state) {
       case VpnState.idle:
-        return 'Disconnected';
+        return 'Отключено';
       case VpnState.connecting:
-        return 'Connecting…';
+        return 'Подключение…';
       case VpnState.connected:
-        return 'Connected';
+        return 'Подключено';
       case VpnState.stopping:
-        return 'Disconnecting…';
+        return 'Отключение…';
       case VpnState.error:
-        return 'Connection failed';
+        return 'Ошибка подключения';
     }
   }
 }
