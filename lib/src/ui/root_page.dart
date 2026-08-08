@@ -36,10 +36,10 @@ class _RootPageState extends State<RootPage> {
         selectedIndex: _index,
         onDestinationSelected: (index) => setState(() => _index = index),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.shield_outlined), label: 'Connection'),
-          NavigationDestination(icon: Icon(Icons.dns_outlined), label: 'Servers'),
-          NavigationDestination(icon: Icon(Icons.article_outlined), label: 'Logs'),
-          NavigationDestination(icon: Icon(Icons.settings_outlined), label: 'Settings'),
+          NavigationDestination(icon: Icon(Icons.shield_outlined), label: 'Подключение'),
+          NavigationDestination(icon: Icon(Icons.dns_outlined), label: 'Серверы'),
+          NavigationDestination(icon: Icon(Icons.article_outlined), label: 'Логи'),
+          NavigationDestination(icon: Icon(Icons.settings_outlined), label: 'Настройки'),
         ],
       ),
     );
